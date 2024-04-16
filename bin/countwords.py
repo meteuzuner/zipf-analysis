@@ -5,8 +5,23 @@ and write them to a CSV-file.
 
 import string
 from collections import Counter
-
 import utilities as util
+
+
+
+import argparse
+parser = argparse.ArgumentParser(description=(
+    "Count the occurrences of all words in a text "
+    "and write them to a CSV-file."
+))
+parser.add_argument('infile', type=argparse.FileType('r'),
+                    nargs='?', default='-',
+                    help='Input file name')
+parser.add_argument('-n', '--num',
+                    type=int, default=None,
+                    help='Output only n most frequent words')
+args = parser.parse_args()
+
 
 
 def count_words(reader):
@@ -19,6 +34,7 @@ def count_words(reader):
     return word_counts
 
 
-with open('data/frankenstein.txt', 'r') as reader:
-    word_counts = count_words(reader)
-util.collection_to_csv(word_counts, num=100)
+
+
+word_counts = count_words(args.infile)
+util.collection_to_csv(word_counts, num=args.num)
